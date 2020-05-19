@@ -19,4 +19,15 @@ Based on Pluralsight course: [Building Web Applications with ASP.NET Core MVC](h
     * Add MapControllerRoute to allow route mapping definitions.
 
 ### Module 4 Notes
-
+Model View Controller pattern - separation of concerns.
+Razor is the view engine.
+* Model & Repository
+    * Group of classes that make up domain data
+    * Classes that manage the data
+    * Repository consumed by the Consumer class. - use DI. services.AddScoped<Interface, Concrete>
+        AddTransitent - every time we get a new clean instance
+        AddSingleton - every time we get back hte same instance
+        AddScoped - creates one instance per request, but shared within a request.
+* Controller
+* Adding view
+* Style view
