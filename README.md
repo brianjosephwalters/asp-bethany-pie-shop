@@ -43,4 +43,8 @@ Razor is the view engine.
     * View model doesn't always map to domain model.
         * use view bag
         * use viewmodel - wraps multiple properties.
+    * Layout files are templates that help prevent code duplication.
+        * Views can point to the layout the want to use.
+        * Views can use a ViewStart.cshtml file.
+        * Views can load data with an @using syntax.
 * Style view
