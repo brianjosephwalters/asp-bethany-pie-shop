@@ -29,5 +29,18 @@ Razor is the view engine.
         AddSingleton - every time we get back hte same instance
         AddScoped - creates one instance per request, but shared within a request.
 * Controller
-* Adding view
+    * responds to user input, updates the model, no knowledge of data persistence (hidden by Model)
+    * an Action.  In the case of MVC, returns a View as a result.
+    * Binds data to the View. View is just a template.
+* Adding Views
+    * HTML template .cshtml, "plain" or strongly-typed views.
+    * Razor markup allows C# code in template.  Code is executed on _server side_.
+    * Each controller has a folder where all of its view are rendered.
+    * ViewBag addds data to the view. dynamic.
+    * Normally, use strongly typed.
+        * type the model in the template. 
+        * c# for looping
+    * View model doesn't always map to domain model.
+        * use view bag
+        * use viewmodel - wraps multiple properties.
 * Style view
