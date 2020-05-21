@@ -48,3 +48,5 @@ Razor is the view engine.
         * Views can use a ViewStart.cshtml file.
         * Views can load data with an @using syntax.
 * Style view
+    * Library Manager for client-side package sources. Older versions used bower. Or add packages manually.
+    * UseStaticFiles() points to wwwroot
