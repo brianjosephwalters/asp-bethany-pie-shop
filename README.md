@@ -93,4 +93,10 @@ Razor is the view engine.
     * Built in or custom.
     * asp-controller, asp-action, asp-route-*, asp-route (forces)
     * @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-    
+### Module 7 - Improving Views
+* Partial Views
+    * Partial Views. (start with _)
+    * partial tag indicates it should be search for in the shared folder.
+* Sessions
+    * Asp .NET Core adds sessions and associates with a cookie.
+    * services.AddSessions() and app.UseSessions()
