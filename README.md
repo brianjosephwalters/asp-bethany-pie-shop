@@ -72,3 +72,25 @@ Razor is the view engine.
     * Adding data with `OnModelCreating()`.
     * Creating data initialization migrations and applying to database.
 
+### Module 6 - Routing
+*  Overview
+    *  Maps URL to endpoint
+    *  ASP.Net can generate outgoing links
+    *  Convention based route (ASP .Net Core) / Attribute based routing (APIs)
+    *  Middleware names are different between 2.1 and 3.
+*  Segments:  First part after host points to controller, second part to action. 
+    *  pattern: {controller}/{action}
+    *  URL Pattern -> Handler -> Action on MVC Controller.
+    *  Configure with MapControllerRoute - ensure defined in correct order with most specific at top.
+    *  Route Defaults: {controller=Home}/{action=Index}
+    *  Passing Values: {controller=Home}/{action=Index}/{id?}
+        * ? = optional
+        * Adding constraints for {id:int?}
+*  Tag Helpers
+    * Adds navigation to site - ASP.Net Core will generate correct links.
+        * Use instead of Html helpers.
+    * Executes server-side - triggers generation of correct link.
+    * Built in or custom.
+    * asp-controller, asp-action, asp-route-*, asp-route (forces)
+    * @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+    
