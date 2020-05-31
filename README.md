@@ -50,3 +50,25 @@ Razor is the view engine.
 * Style view
     * Library Manager for client-side package sources. Older versions used bower. Or add packages manually.
     * UseStaticFiles() points to wwwroot
+
+### Module 5 - Entity Framework Core
+* Entry Framework as an ORM (EF Core)
+    * LINQ statements
+    * SQL Server and other relational (and non-relational) databases
+    * Only supports code-first based support (not edmx base approach)
+    * Id (or IID) are default primary keys
+    * What you need - Domain Classes, Database Context (manages entity objects during runtime, change tracking, persisting), Application Configuration (AppSettings.json file)
+    * Configure by adding `services.AddDbContext` in `ConfigureServices()`.
+    * DbSet return type in DbContext indicates a mapping to a table?
+    * Added Microsoft.EntityFrameworkCore.SqlServer & ...Tools as nugets
+    * Access appsettings.json using IConfiguration injected into Startup.cs
+* Initializing Db from code
+    * EF Core supports Migrations to create database model
+        * add-migration <Migration Name>
+        * update-database
+    * EF Core can populate database
+        * HasData() to seed data through a migration
+* Migrations
+    * Adding data with `OnModelCreating()`.
+    * Creating data initialization migrations and applying to database.
+
