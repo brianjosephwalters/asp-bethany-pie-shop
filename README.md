@@ -99,4 +99,24 @@ Razor is the view engine.
     * partial tag indicates it should be search for in the shared folder.
 * Sessions
     * Asp .NET Core adds sessions and associates with a cookie.
-    * services.AddSessions() and app.UseSessions()
+    * services.AddSession() AND app.UseSession()
+        * UseSession() called before routing.
+    * "Shopping Cart" session wired up in StartUp class.
+        * Created when user accesses site
+        * requests check for presence of Shopping Cart GUID - either create one or return
+    * HttpContextAccessor is required for getCart() to grab the CardId from the headers.
+        * Add to services in AddHttpContextAccessor() for injection.
+* View Components
+    * Partial Views data is passed from calling view.
+    * Similar to Partial View - only used for displaying partial content
+    * Data not passed from calling view.  Supports Dependency Injected.  Always linked from parent view.
+    * Standalone components where logic sits behind it.  Login, Navigation, Shopping Carts
+    * base ViewComponent:  public, non-abstract, non-nested class.
+    * needs a View: Views/Shared/Components
+    * Need to use @await and invoke async from a View or general layout.  New to Razor.
+* Custom Tag Helpers
+    * Enable server-side C# code to participate in creating and rendering HTML elements in Razor files.
+    * Inherits from TagHelper. Name of class is element name + TagHelper
+    * Register all tag helpers.  Place them in the same location.
+
+    
