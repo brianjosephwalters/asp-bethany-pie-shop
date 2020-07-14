@@ -1,7 +1,8 @@
 # Bethany's Pie Shop
 
 Based on Pluralsight course: [Building Web Applications with ASP.NET Core MVC](https://app.pluralsight.com/library/courses/building-aspdotnet-core-mvc-web-applications/table-of-contents)
-
+And Continuing with: [Building an Enterprise Application with ASP.NET Core MVC](https://app.pluralsight.com/library/courses/aspdotnet-core-mvc-enterprise-application/table-of-contents)
+## Building Web Applications with ASP.NET Core MVC
 ### Module 3 Notes:
 * Program.cs: main method, like in Spring.  Specify "startup" class to bootstrap framework.
 * Startup.cs: Define request handling pipeline. Configuring Services needed. Dependency Injection starting point.
@@ -170,3 +171,28 @@ Razor is the view engine.
     * Allow or deny access to resources for users.
     * [Authorize] attribute on controller or actions.
         * Many more options such as Roles
+
+## Building an Enterprise Application with ASP.NET Core MVC
+### Module 2 - Overview
+* ASP .NET Core Identity System
+* Security Features
+* Administration Backend and Model validation
+* Tag Helpers & View Components
+* Performance with Caching & Logging
+* CI/CD Visual Studio Team Services
+
+*** Module 3 - Authenticating and Authorizing Users with ASP.Net Identity
+* User Management
+    * Create & manage users from within the application
+    * User management is built-in
+    * CRUD operations and more - UserManager<IdentityUser>
+    * Microsoft.AspNetCore.Identity.EntityFrameCore (.csproj file)
+    * Most actions done using the UserManager class.
+        * Create users using `await _userManager.CreateAsync(...)`
+        * Framework handles password storage/salting/etc.
+        * AddIdentity() call in service can set password configurations.
+* Extending Identity User Class
+* Role Management
+    * Role-based / Claims-based / Policy-based
+* Adding Third-party Authentication
+
