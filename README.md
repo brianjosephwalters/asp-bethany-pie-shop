@@ -145,3 +145,28 @@ Razor is the view engine.
         * Required, StringLength, Range, RegularExpression, DataType (Phone, email URL)
     * ValidationSummary is a tag helper to display validation errors. (All is default for all errors)
     * What is BindNever?
+
+### Module 9 - Login Capabilities
+* ASP .NET Core Identity
+    * Membership system, able to authenticate and authorize users.
+    * Supports external providers
+    * SQL Server built-in
+    * Scaffolding views in Core 2.1+
+    * IdentityDbContext, Configuration Changes, Constraints on Registration, Security Cookies, User Options
+    * Must add nuGet packages in Core 3.0+
+        * Microsoft.AspNetCore.Identity.EntityFrameworkCore
+        * Microsoft.AspNetCore.Identity.UI
+    * Update AppDbContext to inherit from IdentityDbUser<IdentityUser> (and created-migration / update-database)
+* Adding Authentication
+    * Use scaffolding in ASP.NET 2.1 and 3.0 (can still use manual approach) - Razor Class Libraries
+    * Razor Class Libraries with views, pages, controllers, view components, etc. added via a library for reuse.
+        * Can override items in these libraries.
+    * Use scaffolding to generate source in your application - copies from Razor Class libraries. 
+        * We can modify these
+        * UserManager<IdentityUser> CRUD on users.  Handles changes to database
+        * SignInManager<IdentityUser>
+    * What is the difference between MVC Views and Razor Pages?
+* Enabling Authorization
+    * Allow or deny access to resources for users.
+    * [Authorize] attribute on controller or actions.
+        * Many more options such as Roles
