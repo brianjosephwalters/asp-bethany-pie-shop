@@ -119,4 +119,29 @@ Razor is the view engine.
     * Inherits from TagHelper. Name of class is element name + TagHelper
     * Register all tag helpers.  Place them in the same location.
 
-    
+### Module 8 - Order Forms
+* Built-in Tag Helpers to build Forms
+    * Form, Input, Lable, Textarea, Select, Validation
+    * <label asp-for="attribute"></label> => <label for="attribute">Attribute</label>
+    * Some tag helpers are attributes for other tag helpers:
+        * asp-controller
+        * asp-action
+        * asp-route, asp-route-*
+        * asp-anti-forgery
+    * [Display] attribute on model tells us what to display in the label.
+* Model Binding
+    * ASP .NET Core will match the arguments coming from the form post to the object properties.
+    * Model binders are components that help take values from the request and build out method parameters.  Invoked in this order!
+        * Form Data
+        * Route variables
+        * Query String
+* Validation
+    * ASP .NET Core's model binding engine can perform a check to see if the values received by model binding match requirements.
+        * ModelState.IsValid is a side product of Model Binding - True/False based on validation errors.
+        * ModelState.GetValidAtionState() allows us to probe a particular property.
+        * AddModelError()
+    * Default validations on as [attributes] on the properties in the model class.
+        * Can create custom attributes to be applied.
+        * Required, StringLength, Range, RegularExpression, DataType (Phone, email URL)
+    * ValidationSummary is a tag helper to display validation errors. (All is default for all errors)
+    * What is BindNever?
