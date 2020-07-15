@@ -1,5 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
-@model IEnumerable<IdentityUser>
+﻿@using Microsoft.AspNetCore.Identity
+@model IQueryable<IdentityUser>
 
 <h2>User Management</h2>
 
@@ -38,4 +38,4 @@ else
         }
     </table>
 }
-<a class="btn-primary" asp-action="AddUser">Add new users</a>
+<a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Add new users</a>

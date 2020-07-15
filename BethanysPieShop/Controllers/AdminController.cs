@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BethanysPieShop.ViewModels;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BethanysPieShop.Controllers
 {
@@ -26,37 +22,29 @@ namespace BethanysPieShop.Controllers
 
         public IActionResult UserManagement()
         {
-            var users = _userManager.Users;
-            return View(users);
+            return View(_userManager.Users);
         }
 
         public IActionResult AddUser()
         {
-            return View();
+            return RedirectToPage("Register");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddUser(AddUserViewModel addUserViewModel)
+        public async Task<IActionResult> DeleteUser(string userId)
         {
-            if (!ModelState.IsValid) return View(addUserViewModel);
-
-            var user = new IdentityUser()
+            IdentityUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
             {
-                UserName = addUserViewModel.UserName,
-                Email = addUserViewModel.Email
-            };
+                IdentityResult result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                    return RedirectToAction("UserManagement");
+                else
+                    ModelState.AddModelError("", "Something went wrong while deleting the user");
 
-            IdentityResult result = await _userManager.CreateAsync(user, addUserViewModel);
-
-            if (result.Succeeded)
-            {
-                return RedirectToAction("UserManagement", _userManager.Users);
             }
-            
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
+            else
+                ModelState.AddModelError("", "This user cannot be found.");
+            return View(_userManager.Users);
         }
     }
 }
