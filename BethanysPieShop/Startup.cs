@@ -26,6 +26,7 @@ namespace BethanysPieShop
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
             services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<IPieRepository, PieRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
