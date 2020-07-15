@@ -177,6 +177,7 @@ Razor is the view engine.
     * We'll return the superclass or interface if there is a return value that doesn't have a view.
     * It seems like we try to compartmentalize methods that simply return ViewResults from those that involve ActionResults or RedirectTos as well.
 * RedirectTo... is used when we need to navigate.
+* Use ViewModels when the view needs to begin with an empty object that it will return (add forms)
 
 
 ## Building an Enterprise Application with ASP.NET Core MVC
