@@ -172,6 +172,13 @@ Razor is the view engine.
     * [Authorize] attribute on controller or actions.
         * Many more options such as Roles
 
+## Summary Notes
+* ViewResult is an ActionResult that renders a view
+    * We'll return the superclass or interface if there is a return value that doesn't have a view.
+    * It seems like we try to compartmentalize methods that simply return ViewResults from those that involve ActionResults or RedirectTos as well.
+* RedirectTo... is used when we need to navigate.
+
+
 ## Building an Enterprise Application with ASP.NET Core MVC
 ### Module 2 - Overview
 * ASP .NET Core Identity System
@@ -195,4 +202,3 @@ Razor is the view engine.
 * Role Management
     * Role-based / Claims-based / Policy-based
 * Adding Third-party Authentication
-

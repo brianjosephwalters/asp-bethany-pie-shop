@@ -16,7 +16,7 @@ namespace BethanysPieShop.Controllers
             _shoppingCart = shoppingCart;
         }
 
-        public IActionResult Checkout()
+        public ViewResult Checkout()
         {
             return View();
         }
@@ -42,7 +42,7 @@ namespace BethanysPieShop.Controllers
             return View(order);
         }
 
-        public IActionResult CheckoutComplete()
+        public ViewResult CheckoutComplete()
         {
             ViewBag.CheckoutCompleteMessage = "Thanks for your order.  You'll soon enjoy our delicious pies.";
             return View();
