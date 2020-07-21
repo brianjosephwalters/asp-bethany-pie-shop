@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using BethanysPieShop.Auth
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -13,11 +14,16 @@
           class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="Identity" 
-                   asp-page="/Account/Manage/Index" 
+                <a asp-area="Identity"
+                   asp-page="/Account/Manage/Index"
                    title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
-            <li><a asp-controller="Admin" asp-action="UserManagement">Admin</a></li>
+            @if (User.IsInRole("Administrator"))
+            {
+                <li><a asp-controller="Admin" asp-action="UserManagement">Users</a></li>
+                <li><a asp-controller="Admin" asp-action="RoleManagement">Roles</a></li>
+
+            }
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
             </li>

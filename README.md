@@ -2,6 +2,7 @@
 
 Based on Pluralsight course: [Building Web Applications with ASP.NET Core MVC](https://app.pluralsight.com/library/courses/building-aspdotnet-core-mvc-web-applications/table-of-contents)
 And Continuing with: [Building an Enterprise Application with ASP.NET Core MVC](https://app.pluralsight.com/library/courses/aspdotnet-core-mvc-enterprise-application/table-of-contents)
+
 ## Building Web Applications with ASP.NET Core MVC
 ### Module 3 Notes:
 * Program.cs: main method, like in Spring.  Specify "startup" class to bootstrap framework.
@@ -181,6 +182,10 @@ Razor is the view engine.
 
 
 ## Building an Enterprise Application with ASP.NET Core MVC
+* I had to implement a bunch of features that were not in the previous course (probably a version difference).
+* I implemented am IHostedService that executes on startup, accesses the database services, and creates an admin user if one doesn't exit.  Need to scop this to local environments once I learn environments.
+[Identity Scaffold Documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/scaffold-identity?view=aspnetcore-3.1&tabs=visual-studio)
+
 ### Module 2 - Overview
 * ASP .NET Core Identity System
 * Security Features
@@ -200,6 +205,85 @@ Razor is the view engine.
         * Framework handles password storage/salting/etc.
         * AddIdentity() call in service can set password configurations.
 * Extending Identity User Class
+    * Extend IdentityUser, add new fields, and update migrations
+    * Replace use of IdentityUser with ApplicationUser (even though the subclass is registered, it doesn't seem to allow the use of the superclass.)
+    * Update views for the new properties.
 * Role Management
     * Role-based / Claims-based / Policy-based
+    * RoleManager Framework should handle creating roles, adding roles to users.  How roles are used is part of MVC and [Authorize].
+* Claims-based authorization
+    * External source of information for user's permissions.
+    * talks about what the subject is.
+    * key value pairs
+    * policy based - we have to register polices defining claim requirements.
+    * service.AddAuthorization(
+        {=> options.AddPolicy("DeletePie", => policy.RequireClaim("Delete Pie"))}
+    * We refer to the Policy later in our code.
+        [Authorize(Policy = "DeletePie")]
+    * Can combine several policies.  All must be met.
+    * Combine with Roles. Both must be met.
+    * Custom Policies - built-in makes use of a Requirement, a Handler for Requirement, and a preconfigured Policy.
+        * Add one or more requirements to a Policy.
+        * IAuthorizationRequirement implements an empty interface but can hold custom methods around that requirement.
+        * AuthorizationHandler<RequirementType> evalues the properties of the requirement.  One requirement can have multiple handlers.
+        * Handlers are then registered as a property of a Policy, which are created via service options.
 * Adding Third-party Authentication
+    * Use 3rd party providers to provide claims about the identity of the user.
+    * Don't need to store user credentials in our apps.
+    * Provide two factor authentication out of the box.
+    * Most common 3rd part yproviders are built into ASP .Net Core 3.
+        * Register Authentication Middleware as a service.
+    * Enable SSL in our application
+
+### Module 4 - Hardening your site against attacks
+* Sanitizing Input
+    * XSS attacks (cross site scripting)
+    * Input data should be cleaned before it is stored in the database of the application.
+        * HTML input
+        * Http Headers
+        * Query strings
+        * parsing attributes on images
+    * HTML Encoding 
+        * Razor does HTML encoding for us.
+        * Check javascript and attributes
+    * Regular expressions when accepting input.
+        * used to have anti-XSS.
+    * Request Validation
+        * checks incoming data for potential threats. 
+        * Throws error and input is blocked.
+        * Not being added to ASP Core, but gives us full control.
+    * Built in Encoders - Html, Javascript, Url.
+* CSRF Cross-Site Request Forgery
+    * Tricks end user to execute an unwanted action on site they are currently authenticated.
+    * Typically a state changing request, since they usually can't get access to the response.
+    * For example, place a link for a request on one site onto another site.  
+      A user logged into the first site but in the second site could send the request to to the second 
+      site without realizing it because they have a cookie.
+    * Victim is logged in to a site.  Browser doesn't know forged request is malicious (confused deputy).
+    * Social engineering required - need to get user to click link.
+    * Can be used along side xss
+    * OWASP Cheat sheets:
+        * Header Validation - validate Http request.  Headers can be spoofed, but harder to do on victim's browser
+        * Synchronizer token
+            * A random string is sent back from server. Client needs to send back same string with next request.  Value not available to attacker.
+        * Double submit cookie.
+            * Value is sent to client in cookie and request param.
+            * Compared on server.
+    * .Net Core Anti-Forgery Token
+        * first time requesting a page, a unique token is sent to client associated with user's identity.
+        * when user makes a request, server validates token is present and matches the identity.
+        * for attacks, Request is sent, but token is not.
+        * Already registered and available via DI.  Extra config in the startup class.
+        * [ValidateAntiForgeryToken] / [AutoValidateAntiForgeryToken] - to all POST requests.
+
+### Module 5 - Validating Complex Models
+* Model Binding
+    *  Allows us to create .Net objects from the data in an Http Request, used as parameters for Action methods.
+    *  Binding values is abstracted away by the framework.
+    *  Works with simple types, complex types, arrays.
+* Model Binders
+    *  objects responsible for providing modeling binding systems with data from particular parts of the request.
+    *  Form Values, Routing Values, Query String Values - in that order.
+    *  Binding simple data types - string when expecting int will turn to 0.
+        * use int? to allow differentiation between 0 and null.
+    *  Binding complex types

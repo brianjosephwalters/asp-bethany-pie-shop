@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace BethanysPieShop.ViewModels
 {
-    public class AddUserViewModel
+    public class EditUserViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
@@ -16,13 +18,9 @@ namespace BethanysPieShop.ViewModels
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
         public DateTime BirthDay { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-
+        public List<string> Claims { get; set; }
     }
 }

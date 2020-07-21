@@ -22,6 +22,8 @@ namespace BethanysPieShop.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [Authorize(Policy = "MinimumOrderAge")]
         public IActionResult Checkout(Order order)
         {
             var items = _shoppingCart.GetShoppingCartItems();
