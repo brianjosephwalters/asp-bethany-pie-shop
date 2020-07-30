@@ -287,3 +287,186 @@ Razor is the view engine.
     *  Binding simple data types - string when expecting int will turn to 0.
         * use int? to allow differentiation between 0 and null.
     *  Binding complex types
+        * Attributes to influence hte binding system:
+            * Bind - bind properties selectively
+            * BindNever - can be place don property of model object
+            * BindRequire - throws error if now value can be found.
+        * Tries to bind everything it finds.
+    *  Binding collections to an Array
+        * Even the form can be a list of pies with something like @model List<Pie> and "@Model[i].PieId"
+    *  Can specify the Binding source
+        * A non default place to search, or change up the sequence
+        * FromBody  Common wiht API controller
+        * FromQuery
+        * FromHeader
+        * FromRoute
+        * FromForm
+* Validating Data
+    * ModelState.AddModelError, ModelState.IsValid
+    * Validation Atributes - Required, StringLength, Range, RegularExpression, DataType(Phone, Email, URL)
+    * asp-validation-summary="All" in the template, also asp-validation-for
+    * Manual Validation
+* Custom Validation Attributes
+    * Create reusable validation logic
+    * Class implements Attribute and IModelValidator
+        * Validate method, returns IEnumberable<ModelValidationResult>
+* Client-side validation
+    * Jquery Validation
+    * Jquery Unobtusive validation - ASP.NET core will create on the server attributes that are interpreted by Jquery unobtrustive. ASP .NET core is configuring the client side jquery library. So validation is still in one place.
+    * Tag Helpers - input tag helpers noticed specified attributes on the Model, and thus generates the corresponding data- attributes in the html.  JQuery Validation Unobtrusive will pick this up on the client.
+    * Better user experience, but can always be disabled.
+* Remote validation
+    * Uses [Remote] attribute
+    * Invokes a method on the server side from the client side.
+    * Needs name of action method as string, name of controller, error message
+
+### Module 6 - Creating Clean and Maintainable View Code
+* Advanced Built-in Tag Helpers
+    * Tag helpers enable server-side C# code to participate in creating and rendering HTML elements in Razor files.
+    * Replace HTML helpers.  Still available and some are still present.
+        * Tag helpers are more HTML friendly.
+        * Tag helpers have Intellisense support.
+        * Lots of built-in Tag helpers with ASP Core
+            - Form tag helper, Input tag helper, Label tag helper, asp-controller, asp-action, asp-route, asp-antiforgery.
+    * Javascript Tag Helper
+        * Enhances `<script>` tag.
+        * asp-src-inclue="Scripts/**/*.js" and asp-src-exclude="Scripts/TempScripts/*.js"
+        * asp-fallback-src asp-fallback-test
+    * CSS Tag Helper
+        * asp-href-include, asp-href-exclude, asp-fallback-href, asp-fallback-test-class, asp-fallback-test-property, asp-fallback-test-property
+    * Image Tag Helper
+        * asp-append-version adds an extra version parameter value at the end of the file name.  Uses caching, but allows new version to show up on client side if it is changed on the server side.
+    * Environment Tag Helper
+        * Check whether part of html should be generated based on the Hosting Environment.
+        * One or more environment name. 
+        * Allows including of debug information etc.
+        * Good for minified vs. unminified versions of imports based on Environment.
+        * Use with asp-append-version to help detect changes and overriding cache.
+* Creating Custom Tag Helpers
+    * Inherits for base TagHelper class.
+    * Typically placed in a separate projects for reusability.
+    * Name matters.  Identifies the element name.
+        * Attribute HtmlTargetElement on class can override this
+    * HtmlTargetElement
+    * HtmlAttributeName - wired to elements
+    * Can override/augment standard HTML elements as well.
+* Conditional Tag Helper
+    * Only if the condition returns true will something happen.
+    * output.SuppressOutput();
+    * If parent element isn't generated, inner element won't generate.
+* Limiting scope of Tag Helper 
+    * By default, tag helpers are applied to all instances of the tag
+    * Use @tagHelperPrefix to make the use of the tag helper more explicit.
+* Async View Components
+    * Blocks of UI functionality (partial content - like partial views)
+    * Partial View is just view code.  No logic. 
+    * View Component has view code and logic to which we can pass parameters.
+    * Follows Separation of Concerns.
+    * Look like mini controllers but always linked to parent view.
+    * Invoke method is not an override from ViewComponent, but the framework will call it for us.
+    * Has to be View/Shared/Components or Useage Context, i.e., Home/Components/
+    * AsyncViewComponent
+        * ViewComponents are synchronous and so Invoke() can't make await calls.
+        * AsyncViewComponent have AsyncInvoke() that is async.
+        * waits for task to complete before it inserts results into the view.
+* Localizing UI
+    * Based on *.resx
+    * Way that resources are used in 3.0
+        * Strongly typed access to resources is gone.
+    * IStringLocalizer and IStringLocalizer<T>
+        * Use DI to add IStringLocalizer<ClassName> localizer.
+        * localizer["StringToFind"]
+        * searches for exact match, partial match, otherwise fallback, otherwise it'll return the original string.
+        * Support localization for Controllers, Services, Views, and Data annotations
+    * ConfigureServices
+        * AddLocalization() localizes the application
+        * AddViewLocalization() (after .AddMvc()) localizes the views
+        * RequestLocalizationOptions allow us to select the CultureInfo from the request.
+        * app.UseRequestLocatization
+
+
+### Module 9 - Diagnosing Runtime Application Issues
+* Need to add diagnostic middleware
+* Pages
+    * UseDeveloperExceptionPage - Development only
+    * UseStatusCodePage - Development only
+    * UseExceptionHandler
+        - which page to show if something goes wrong during excution
+    * UseWelcomePage
+        - reroutes.  For example, when application is starting.
+* Logging
+    * EventSource - logging of the OS. 
+    * ILogger - linked to ASP .Net Core using dependency injections
+    * DiagnosticSource - used ASP .Net Core
+* ILogger
+    * Uses many providers, most common for Console.  Also Debug, EventSource, EventLog, TraceSource, AzureAppService
+    * Inject using ILoggerFactory and adding provider with the log level.
+    * Has a category for logging based on generic type injected and used.
+    * WithFilter on logger allows only logging custom filters strings at the given level.
+* Third party providers
+    * often have structured logging to provide more detailed logs
+* Filters
+    * Allow us to get information about execution of code.
+    * Add logic into request pipeline.
+    * Filter triggers before or after execution.
+        * Often used for cross-cutting concerns, i.e., logging
+        * Authorization
+    * Interrupts normal flow - can block actions from executing.
+    * Pipeline: Middleware -> Routing middleware -> Action Selection -> Filters -> Action
+    * Types:
+        - Authorization filters
+            * IAuthorizationFilter.  Contains context data about the request.
+        - Resource filters. caching.  run before model binding
+        - Action filters - before and after action method. can change results
+            * Most general purpose
+            * Interrupt before or change the results.
+            * IActionFilter
+        - Exception filters - how to handle exceptions occuring in action.  Usually global
+        - Result filters - before and after ActionResult.  Only if Action runs successfully.
+
+    * If you need dependency injection for filter, you may need to use ServiceFilter(typeof(FilterName)) annotation.
+        - Also need to register filter as a Service in the config (.AddScoped)
+    * Global Filters
+        * Use AddService() method in AddMvc() configuration
+* Azure Application Insights
+    * Cloud based, Performance and Exceptions, Alerts and Dashboards
+        * Works with sites hosted elsewhere
+### Module 10 - Improving Application Performance
+* Caching
+    * Server side, caching server, on client
+* In-memory Caching
+    * Simplest, in the memory of web server, 
+    * Stick Sessions - tied to that server (subsequent requests should return to the same server)
+    * Can work with any data type, but prefer expensive data.
+    * AddMemoryCache(), then inject and use.  Straight forward dictionary cache.
+    * Absolute expiration, Sliding expiration, Cache priority, PostEvictionDelegate
+* Caching Tag Helper
+    * Use it from razor code, but server-side.
+    * Uses IMemoryCache in a declarative way.
+    * Requires sticky sessions
+    * Basically determines whether to cache the PAGE returned, as opposed to just the request to the action
+    * Can cache mulitple instances of the same tag helper using a key. vary-by-user, vary-by-route, vary-by-query, vary-by-cookie, vary-by-header, vary-by
+* Distributed Caching with Redis
+    * Available to all servers, with no sticky cache
+    * Can scale caching servers
+    * Redis and SQL-Server - IDistributedCache
+    * Add redis package with nuget and start redis-server.exe
+        * Redis only stores byte arrays so we need to Serialize data using Newtonsoft.Json package in nuget
+* Response Caching
+    * Client-side and intermediate caching, based on Headers
+    * ResponseCache attribute sets headers in the response
+        * Location Any or Client
+        * Duration
+        * No Store
+        * Vary By
+    * CacheProfile wiht parameters set. Then use the profiles in actual code.
+* Managing Compression
+    * Compressed data arrives faster and will feel more responsive.  Most data can be compressed.
+    * Accept-Encoding header indicates CLient can accept compressed data
+    * Server data response uses Content-Encoding
+    * ResponseCompression package / middleware
+
+
+
+
+
